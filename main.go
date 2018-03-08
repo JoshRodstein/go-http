@@ -63,25 +63,19 @@ func GetHandler(w http.ResponseWriter, r *http.Request) {
 // PostHandler converts post request body to string
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		fmt.Fprint(w, "Post recieved\n")
-	}
-
-	user := User{}
-
-	err := json.NewDecoder(r.Body).Decode(&user)
-	if err != nil {
-			http.Error(w, "json body empty", 200)
-			return
-	}
-	userJson, err := json.Marshal(user)
-	if err != nil {
-		http.Error(w, "Error converting results to json", 400)
+		decoder := json.NewDecoder(r.Body)
+		var u User
+		err := decoder.Decode(&u)
+		if err != nil {
+			http.Error(w, "Unable to parse JSON body", 400)
+		}
+		defer r.Body.Close()
+		fmt.Fprint(w, u.Username)
+		fmt.Fprint(w, "\n")
 		return
+	} else {
+		http.Error(w, "Ivalid request method", http.StatusMethodNotAllowed)
 	}
-
-	fmt.Fprint(w, "Did a post\n:")
-	w.Write(userJson)
-	fmt.Fprint(w, "\n")
 }
 
 
