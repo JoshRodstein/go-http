@@ -29,6 +29,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/get", GetHandler)
 	mux.HandleFunc("/post", PostHandler)
+	mux.HandleFunc("/form", FormPostHandler)
 
 	log.Printf("listening on port %s", *flagPort)
 	log.Fatal(http.ListenAndServe(":"+*flagPort, mux))
@@ -74,8 +75,14 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "\n")
 		return
 	} else {
-		http.Error(w, "Ivalid request method", http.StatusMethodNotAllowed)
+		http.Error(w, "Ivalid request method",400)
 	}
+}
+
+func FormPostHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	fmt.Fprint(w, r.FormValue("Username")+"\n")
+	return
 }
 
 
