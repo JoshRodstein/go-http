@@ -11,11 +11,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
 )
 
 type User struct {
-		Username string
+	Username string
 }
 
 var (
@@ -24,7 +23,6 @@ var (
 )
 
 func main() {
-
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/get", GetHandler)
@@ -35,30 +33,28 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+*flagPort, mux))
 }
 
-
-
 // GetHandler handles the index route
 func GetHandler(w http.ResponseWriter, r *http.Request) {
-		user := User{}
+	user := User{}
 
-		// decode json request data into User struct
-		err := json.NewDecoder(r.Body).Decode(&user)
-		if err != nil {
-				http.Error(w, "json body empty", 200)
-				return
-		}
+	// decode json request data into User struct
+	err := json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		http.Error(w, "json body empty", 200)
+		return
+	}
 
-		// marchal data from user struct back into json
-		// for writing
-		userJson, err := json.Marshal(user)
-		if err != nil {
-			http.Error(w, "Error converting results to json", 400)
-			return
-		}
+	// marchal data from user struct back into json
+	// for writing
+	userJson, err := json.Marshal(user)
+	if err != nil {
+		http.Error(w, "Error converting results to json", 400)
+		return
+	}
 
-		fmt.Fprint(w, "jason data parsed and recieved\n:")
-		w.Write(userJson)
-		fmt.Fprint(w, "\n")
+	fmt.Fprint(w, "jason data parsed and recieved\n:")
+	w.Write(userJson)
+	fmt.Fprint(w, "\n")
 }
 
 // PostHandler converts post request body to string
@@ -75,17 +71,20 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "\n")
 		return
 	} else {
-		http.Error(w, "Ivalid request method",400)
+		http.Error(w, "Ivalid request method", 400)
 	}
 }
 
 func FormPostHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	fmt.Fprint(w, r.FormValue("Username")+"\n")
-	return
+	if r.Method == "POST" {
+		r.ParseForm()
+		fmt.Fprint(w, r.FormValue("Username")+"\n")
+		return
+	} else {
+		http.Error(w, "Not a valid request", 402)
+	}
+
 }
-
-
 
 func init() {
 	log.SetFlags(log.Lmicroseconds | log.Lshortfile)
