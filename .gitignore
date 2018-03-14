@@ -1,0 +1,13 @@
+# Binaries for programs and plugins
+
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+#Test bianry, build with 'go test-c;
+*.test
+
+#output of the go voerage tool, specifically when used with LiteIDE
+*.out
