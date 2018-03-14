@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Property Management Database Application
 
 ### Front End
@@ -41,3 +42,8 @@
 
 
 ## [REST & http](https://code.tutsplus.com/tutorials/a-beginners-guide-to-http-and-rest--net-16340)
+=======
+# go-http      
+
+  - Working on parsing and handling http-requests in go
+>>>>>>> 77919de384123d9ffc9cd878d7fd8e97949d85c6
